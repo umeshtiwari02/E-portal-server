@@ -33,30 +33,34 @@ public class ExamserverApplication implements CommandLineRunner {
 		System.out.println("starting code..");
 
 		try {
-			User user=new User();
-			user.setFirstName("Umesh");
-			user.setLastName("Tiwari");
-			user.setUsername("umesh");
-			user.setPassword(this.bCryptPasswordEncoder.encode("tiwari"));
-			user.setEmail("ume@gmail.com");
-			user.setProfile("profile.png");
-
-			Role role=new Role();
-			role.setRoleId(55L);
-			role.setRoleName("ADMIN");
-
-			Set<UserRole> userRoleSet=new HashSet<>();
-			UserRole userRole=new UserRole();
-			userRole.setRole(role);
-			userRole.setUser(user);
-
-			userRoleSet.add(userRole);
-
-			User user1 = this.userService.createUser(user, userRoleSet);
-			System.out.println(user1.getUsername());
+		    if (userService.getUser("umesh") == null) { // replace with appropriate method
+		        User user = new User();
+		        user.setFirstName("Umesh");
+		        user.setLastName("Tiwari");
+		        user.setUsername("umesh");
+		        user.setPassword(this.bCryptPasswordEncoder.encode("tiwari"));
+		        user.setEmail("ume@gmail.com");
+		        user.setProfile("profile.png");
+		
+		        Role role = new Role();
+		        role.setRoleId(55L);
+		        role.setRoleName("ADMIN");
+		
+		        Set<UserRole> userRoleSet = new HashSet<>();
+		        UserRole userRole = new UserRole();
+		        userRole.setRole(role);
+		        userRole.setUser(user);
+		
+		        userRoleSet.add(userRole);
+		
+		        User user1 = this.userService.createUser(user, userRoleSet);
+		        System.out.println(user1.getUsername());
+		    } else {
+		        System.out.println("User already exists, skipping creation.");
+		    }
+		} catch (UserFoundException e) {
+		    System.out.println("User already exists: " + e.getMessage());
 		}
-		catch (UserFoundException e) {
-			e.printStackTrace();
-		}
+
 	}
 }
